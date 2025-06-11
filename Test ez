@@ -106,9 +106,12 @@ end)
 spb.MouseButton1Click:Connect(function()
 	if st then
 		local c=p.Character
-		if c and c:FindFirstChild("Right Leg") then
-			local a={st,CFrame.new(c["Right Leg"].Position)}
-			f:InvokeServer(unpack(a))
+		if c then
+			local part=c:FindFirstChild("Right Leg") or c:FindFirstChild("RightLowerLeg") or c:FindFirstChild("RightFoot")
+			if part then
+				local a={st,CFrame.new(part.Position)}
+				f:InvokeServer(unpack(a))
+			end
 		end
 	else
 		sb.Text="❗ Select a tower first"
