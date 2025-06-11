@@ -1,6 +1,6 @@
 local p = game.Players.LocalPlayer
 local rs = game:GetService("ReplicatedStorage")
-local u = rs:WaitForChild("Towers"):WaitForChild("Upgrades")
+local t = rs:WaitForChild("Towers")
 local s = rs:WaitForChild("Functions"):WaitForChild("SpawnTower")
 local g = Instance.new("ScreenGui", p:WaitForChild("PlayerGui"))
 g.Name = "TowerSpawnGUI"
@@ -11,9 +11,11 @@ f.Size = UDim2.new(0, 300, 0, 30)
 f.Position = UDim2.new(0.5, -150, 0.25, 0)
 f.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 f.BorderSizePixel = 0
+f.Active = true
+f.Draggable = false
 local sb = Instance.new("TextButton", f)
 sb.Size = UDim2.new(0.7, 0, 1, 0)
-sb.Text = "Select Upgrade"
+sb.Text = "Select Tower"
 sb.TextColor3 = Color3.new(1, 1, 1)
 sb.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 sb.BorderSizePixel = 0
@@ -33,7 +35,7 @@ df.BorderSizePixel = 0
 local sbx = Instance.new("TextBox", df)
 sbx.Size = UDim2.new(1, -10, 0, 25)
 sbx.Position = UDim2.new(0, 5, 0, 5)
-sbx.PlaceholderText = "Search Upgrade..."
+sbx.PlaceholderText = "Search Tower..."
 sbx.Text = ""
 sbx.TextColor3 = Color3.new(1, 1, 1)
 sbx.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
@@ -50,15 +52,15 @@ local l = Instance.new("UIListLayout", dd)
 l.SortOrder = Enum.SortOrder.LayoutOrder
 l.Padding = UDim.new(0, 2)
 local sel = nil
-local function r(t)
+local function r(t2)
 	for _, c in ipairs(dd:GetChildren()) do
 		if c:IsA("Frame") then
 			c:Destroy()
 		end
 	end
 	local cnt = 0
-	for _, tw in ipairs(u:GetChildren()) do
-		if not t or tw.Name:lower():find(t:lower()) then
+	for _, tw in ipairs(t:GetChildren()) do
+		if not t2 or tw.Name:lower():find(t2:lower()) then
 			cnt += 1
 			local e = Instance.new("Frame", dd)
 			e.Size = UDim2.new(1, -4, 0, 25)
@@ -81,7 +83,7 @@ local function r(t)
 			pl.TextScaled = true
 			local pr = "???"
 			pcall(function()
-				pr = tostring(u[tw.Name].Config.Price.Value)
+				pr = tostring(t[tw.Name].Config.Price.Value)
 			end)
 			pl.Text = "$" .. pr
 			nb.MouseButton1Click:Connect(function()
@@ -114,6 +116,37 @@ spb.MouseButton1Click:Connect(function()
 			s:InvokeServer(unpack(a))
 		end
 	else
-		sb.Text = "❗ Select an upgrade first"
+		sb.Text = "❗ Select a tower first"
+	end
+end)
+local uis = game:GetService("UserInputService")
+local dragging = false
+local dragInput = nil
+local dragStart = nil
+local startPos = nil
+local function u(input)
+	local d = input.Position - dragStart
+	f.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + d.X, startPos.Y.Scale, startPos.Y.Offset + d.Y)
+end
+f.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		dragging = true
+		dragStart = input.Position
+		startPos = f.Position
+		input.Changed:Connect(function()
+			if input.UserInputState == Enum.UserInputState.End then
+				dragging = false
+			end
+		end)
+	end
+end)
+f.InputChanged:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+		dragInput = input
+	end
+end)
+uis.InputChanged:Connect(function(input)
+	if input == dragInput and dragging then
+		u(input)
 	end
 end)
