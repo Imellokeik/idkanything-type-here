@@ -111,7 +111,7 @@ spb.MouseButton1Click:Connect(function()
 		if c and c:FindFirstChild("HumanoidRootPart") then
 			local a = {
 				sel,
-				CFrame.new(c.HumanoidRootPart.Position)
+				CFrame.new(c.1.Position)
 			}
 			s:InvokeServer(unpack(a))
 		end
