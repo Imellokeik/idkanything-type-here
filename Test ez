@@ -4,7 +4,7 @@ s.ResetOnSpawn=false
 s.IgnoreGuiInset=true
 
 local main=Instance.new("Frame",s)
-main.Size=UDim2.new(0,240,0,80)
+main.Size=UDim2.new(0,240,0,110)
 main.Position=UDim2.new(0,30,0,150)
 main.BackgroundColor3=Color3.fromRGB(20,20,20)
 main.BorderSizePixel=0
@@ -17,13 +17,11 @@ outline.Thickness = 2
 outline.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 outline.LineJoinMode = Enum.LineJoinMode.Round
 
--- Rainbow animation
 task.spawn(function()
 local h = 0
 while true do
 h = (h + 1) % 360
-local c = Color3.fromHSV(h/360, 1, 1)
-outline.Color = c
+outline.Color = Color3.fromHSV(h/360, 1, 1)
 task.wait(0.03)
 end
 end)
@@ -49,7 +47,6 @@ topbar.InputBegan:Connect(function(input)
 if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 dragging=true
 offset=Vector2.new(input.Position.X, input.Position.Y) - Vector2.new(main.Position.X.Offset, main.Position.Y.Offset)
-
 if inputConnection then inputConnection:Disconnect() end
 inputConnection = game:GetService("UserInputService").InputChanged:Connect(function(moveInput)
 if dragging and (moveInput.UserInputType == Enum.UserInputType.MouseMovement or moveInput.UserInputType == Enum.UserInputType.Touch) then
@@ -70,30 +67,33 @@ end)
 local btn=Instance.new("TextButton",main)
 btn.Size=UDim2.new(0.9,0,0,30)
 btn.Position=UDim2.new(0.05,0,0,40)
-btn.BackgroundColor3=Color3.fromRGB(255,0,0)
-btn.Text="Egg Event Farm: Off"
+btn.BackgroundColor3=Color3.fromRGB(60,60,60)
+btn.Text="Select Egg: Legendary"
 btn.Font=Enum.Font.GothamSemibold
 btn.TextColor3=Color3.new(1,1,1)
 btn.TextSize=13
 btn.BorderSizePixel=0
+btn.AutoButtonColor=false
 
 Instance.new("UICorner",btn).CornerRadius=UDim.new(0,5)
 
-local skip=game:GetService("ReplicatedStorage"):FindFirstChild("CrateGivingBefore1M")
-local on=false
+local eggList={"Basic Egg","Rare Egg","Legendary Egg"}
+local index=3
 
 btn.MouseButton1Click:Connect(function()
-on=not on
-btn.BackgroundColor3=on and Color3.fromRGB(0,255,0) or Color3.fromRGB(255,0,0)
-btn.Text=on and "Egg Event Farm: On" or "Egg Event Farm: Off"
+index=index%#eggList+1
+btn.Text="Select Egg: "..eggList[index]
 end)
 
+local rs=game:GetService("ReplicatedStorage")
+local plr=game:GetService("Players").LocalPlayer
+
+for _,c in pairs(getconnections(rs.Events.OpenEventEgg.OnClientEvent)) do c:Disable() end
+
 task.spawn(function()
-while task.wait(1) do
-if on and skip and skip:IsA("RemoteEvent") then
+while task.wait() do
 pcall(function()
-skip:FireServer()
+rs.Events.OpenEventEgg:FireServer(eggList[index],1)
 end)
-end
 end
 end)
