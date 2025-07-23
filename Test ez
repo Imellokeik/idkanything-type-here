@@ -31,7 +31,7 @@ end)
 local topbar=Instance.new("TextButton",main)
 topbar.Size=UDim2.new(1,0,0,30)
 topbar.BackgroundColor3=Color3.fromRGB(30,30,30)
-topbar.Text=":egg:Egg Event Farmer:egg:"
+topbar.Text="Egg Event Farmer"
 topbar.Font=Enum.Font.GothamBold
 topbar.TextColor3=Color3.new(1,1,1)
 topbar.TextSize=14
