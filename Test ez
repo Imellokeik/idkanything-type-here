@@ -115,6 +115,24 @@ note.TextWrapped=true
 note.TextScaled=true
 note.Font=Enum.Font.Gotham
 
+local close=Instance.new("TextButton",main)
+close.Size=UDim2.new(0,20,0,20)
+close.Position=UDim2.new(1,-25,0,5)
+close.BackgroundTransparency=0.8
+close.BackgroundColor3=Color3.fromRGB(255,0,0)
+close.Text="X"
+close.TextColor3=Color3.fromRGB(255,255,255)
+close.Font=Enum.Font.GothamBold
+close.TextSize=14
+close.BorderSizePixel=0
+close.AutoButtonColor=true
+
+Instance.new("UICorner",close).CornerRadius=UDim.new(0,3)
+
+close.MouseButton1Click:Connect(function()
+s:Destroy()
+end)
+
 local rs=game:GetService("ReplicatedStorage")
 local pg=game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
 
