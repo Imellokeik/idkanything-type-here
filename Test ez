@@ -1,152 +1,99 @@
-local p = game.Players.LocalPlayer
-local rs = game:GetService("ReplicatedStorage")
-local t = rs:WaitForChild("Towers")
-local s = rs:WaitForChild("Functions"):WaitForChild("SpawnTower")
-local g = Instance.new("ScreenGui", p:WaitForChild("PlayerGui"))
-g.Name = "TowerSpawnGUI"
-g.ResetOnSpawn = false
-g.IgnoreGuiInset = true
-local f = Instance.new("Frame", g)
-f.Size = UDim2.new(0, 300, 0, 30)
-f.Position = UDim2.new(0.5, -150, 0.25, 0)
-f.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-f.BorderSizePixel = 0
-f.Active = true
-f.Draggable = false
-local sb = Instance.new("TextButton", f)
-sb.Size = UDim2.new(0.7, 0, 1, 0)
-sb.Text = "Select Tower"
-sb.TextColor3 = Color3.new(1, 1, 1)
-sb.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-sb.BorderSizePixel = 0
-local spb = Instance.new("TextButton", f)
-spb.Size = UDim2.new(0.3, 0, 1, 0)
-spb.Position = UDim2.new(0.7, 0, 0, 0)
-spb.Text = "Spawn"
-spb.TextColor3 = Color3.new(1, 1, 1)
-spb.BackgroundColor3 = Color3.fromRGB(80, 120, 80)
-spb.BorderSizePixel = 0
-local df = Instance.new("Frame", f)
-df.Size = UDim2.new(1, 0, 0, 180)
-df.Position = UDim2.new(0, 0, 1, 0)
-df.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-df.Visible = false
-df.BorderSizePixel = 0
-local sbx = Instance.new("TextBox", df)
-sbx.Size = UDim2.new(1, -10, 0, 25)
-sbx.Position = UDim2.new(0, 5, 0, 5)
-sbx.PlaceholderText = "Search Tower..."
-sbx.Text = ""
-sbx.TextColor3 = Color3.new(1, 1, 1)
-sbx.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-sbx.BorderSizePixel = 0
-local dd = Instance.new("ScrollingFrame", df)
-dd.Position = UDim2.new(0, 5, 0, 35)
-dd.Size = UDim2.new(1, -10, 1, -40)
-dd.CanvasSize = UDim2.new(0, 0, 0, 0)
-dd.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-dd.ScrollBarThickness = 6
-dd.BorderSizePixel = 0
-dd.ClipsDescendants = true
-local l = Instance.new("UIListLayout", dd)
-l.SortOrder = Enum.SortOrder.LayoutOrder
-l.Padding = UDim.new(0, 2)
-local sel = nil
-local function r(t2)
-	for _, c in ipairs(dd:GetChildren()) do
-		if c:IsA("Frame") then
-			c:Destroy()
-		end
-	end
-	local cnt = 0
-	for _, tw in ipairs(t:GetChildren()) do
-		if not t2 or tw.Name:lower():find(t2:lower()) then
-			cnt += 1
-			local e = Instance.new("Frame", dd)
-			e.Size = UDim2.new(1, -4, 0, 25)
-			e.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
-			e.BorderSizePixel = 0
-			local nb = Instance.new("TextButton", e)
-			nb.Size = UDim2.new(0.7, 0, 1, 0)
-			nb.Position = UDim2.new(0, 0, 0, 0)
-			nb.Text = tw.Name
-			nb.TextColor3 = Color3.new(1, 1, 1)
-			nb.BackgroundTransparency = 1
-			nb.TextXAlignment = Enum.TextXAlignment.Left
-			local pl = Instance.new("TextLabel", e)
-			pl.Size = UDim2.new(0.3, -5, 1, 0)
-			pl.Position = UDim2.new(0.7, 0, 0, 0)
-			pl.BackgroundTransparency = 1
-			pl.TextColor3 = Color3.fromRGB(200, 255, 200)
-			pl.TextXAlignment = Enum.TextXAlignment.Right
-			pl.Font = Enum.Font.SourceSans
-			pl.TextScaled = true
-			local pr = "???"
-			pcall(function()
-				pr = tostring(t[tw.Name].Config.Price.Value)
-			end)
-			pl.Text = "$" .. pr
-			nb.MouseButton1Click:Connect(function()
-				sel = tw.Name
-				sb.Text = "Selected: " .. tw.Name
-				df.Visible = false
-			end)
-		end
-	end
-	dd.CanvasSize = UDim2.new(0, 0, 0, 27 * cnt)
+local s=Instance.new("ScreenGui",game.CoreGui)
+s.Name="InjuredCratePanel"
+s.ResetOnSpawn=false
+s.IgnoreGuiInset=true
+
+local main=Instance.new("Frame",s)
+main.Size=UDim2.new(0,240,0,80)
+main.Position=UDim2.new(0,30,0,150)
+main.BackgroundColor3=Color3.fromRGB(20,20,20)
+main.BorderSizePixel=0
+main.Active=true
+
+Instance.new("UICorner",main).CornerRadius=UDim.new(0,6)
+
+local outline = Instance.new("UIStroke", main)
+outline.Thickness = 2
+outline.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+outline.LineJoinMode = Enum.LineJoinMode.Round
+
+-- Rainbow animation
+task.spawn(function()
+local h = 0
+while true do
+h = (h + 1) % 360
+local c = Color3.fromHSV(h/360, 1, 1)
+outline.Color = c
+task.wait(0.03)
 end
-sbx:GetPropertyChangedSignal("Text"):Connect(function()
-	r(sbx.Text)
 end)
-sb.MouseButton1Click:Connect(function()
-	df.Visible = not df.Visible
-	if df.Visible then
-		sbx.Text = ""
-		r("")
-	end
-end)
-spb.MouseButton1Click:Connect(function()
-	if sel then
-		local c = p.Character
-		if c and c:FindFirstChild("HumanoidRootPart") then
-			local a = {
-				sel,
-				CFrame.new(c.HumanoidRootPart.Position)
-			}
-			s:InvokeServer(unpack(a))
-		end
-	else
-		sb.Text = "❗ Select a tower first"
-	end
-end)
-local uis = game:GetService("UserInputService")
-local dragging = false
-local dragInput = nil
-local dragStart = nil
-local startPos = nil
-local function u(input)
-	local d = input.Position - dragStart
-	f.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + d.X, startPos.Y.Scale, startPos.Y.Offset + d.Y)
+
+local topbar=Instance.new("TextButton",main)
+topbar.Size=UDim2.new(1,0,0,30)
+topbar.BackgroundColor3=Color3.fromRGB(30,30,30)
+topbar.Text=":egg:Egg Event Farmer:egg:"
+topbar.Font=Enum.Font.GothamBold
+topbar.TextColor3=Color3.new(1,1,1)
+topbar.TextSize=14
+topbar.BorderSizePixel=0
+topbar.AutoButtonColor=false
+topbar.Active=true
+
+Instance.new("UICorner",topbar).CornerRadius=UDim.new(0,6)
+
+local dragging=false
+local offset
+local inputConnection
+
+topbar.InputBegan:Connect(function(input)
+if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+dragging=true
+offset=Vector2.new(input.Position.X, input.Position.Y) - Vector2.new(main.Position.X.Offset, main.Position.Y.Offset)
+
+if inputConnection then inputConnection:Disconnect() end
+inputConnection = game:GetService("UserInputService").InputChanged:Connect(function(moveInput)
+if dragging and (moveInput.UserInputType == Enum.UserInputType.MouseMovement or moveInput.UserInputType == Enum.UserInputType.Touch) then
+local pos = Vector2.new(moveInput.Position.X, moveInput.Position.Y) - offset
+main.Position = UDim2.new(0, pos.X, 0, pos.Y)
 end
-f.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-		dragging = true
-		dragStart = input.Position
-		startPos = f.Position
-		input.Changed:Connect(function()
-			if input.UserInputState == Enum.UserInputState.End then
-				dragging = false
-			end
-		end)
-	end
 end)
-f.InputChanged:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-		dragInput = input
-	end
+end
 end)
-uis.InputChanged:Connect(function(input)
-	if input == dragInput and dragging then
-		u(input)
-	end
+
+topbar.InputEnded:Connect(function(input)
+if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+dragging = false
+if inputConnection then inputConnection:Disconnect() end
+end
+end)
+
+local btn=Instance.new("TextButton",main)
+btn.Size=UDim2.new(0.9,0,0,30)
+btn.Position=UDim2.new(0.05,0,0,40)
+btn.BackgroundColor3=Color3.fromRGB(255,0,0)
+btn.Text="Egg Event Farm: Off"
+btn.Font=Enum.Font.GothamSemibold
+btn.TextColor3=Color3.new(1,1,1)
+btn.TextSize=13
+btn.BorderSizePixel=0
+
+Instance.new("UICorner",btn).CornerRadius=UDim.new(0,5)
+
+local skip=game:GetService("ReplicatedStorage"):FindFirstChild("CrateGivingBefore1M")
+local on=false
+
+btn.MouseButton1Click:Connect(function()
+on=not on
+btn.BackgroundColor3=on and Color3.fromRGB(0,255,0) or Color3.fromRGB(255,0,0)
+btn.Text=on and "Egg Event Farm: On" or "Egg Event Farm: Off"
+end)
+
+task.spawn(function()
+while task.wait(1) do
+if on and skip and skip:IsA("RemoteEvent") then
+pcall(function()
+skip:FireServer()
+end)
+end
+end
 end)
