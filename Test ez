@@ -4,7 +4,7 @@ s.ResetOnSpawn=false
 s.IgnoreGuiInset=true
 
 local main=Instance.new("Frame",s)
-main.Size=UDim2.new(0,240,0,160)
+main.Size=UDim2.new(0,240,0,190)
 main.Position=UDim2.new(0,30,0,150)
 main.BackgroundColor3=Color3.fromRGB(20,20,20)
 main.BorderSizePixel=0
@@ -104,6 +104,16 @@ on=not on
 toggle.BackgroundColor3=on and Color3.fromRGB(0,255,0) or Color3.fromRGB(255,0,0)
 toggle.Text=on and "Egg Event Farm: On" or "Egg Event Farm: Off"
 end)
+
+local note=Instance.new("TextLabel",main)
+note.Size=UDim2.new(0.9,0,0,30)
+note.Position=UDim2.new(0.05,0,0,120)
+note.BackgroundTransparency=1
+note.Text="Note: Units from auto hatching are still granted. Egg animation was disabled for convenience."
+note.TextColor3=Color3.fromRGB(255,255,255)
+note.TextWrapped=true
+note.TextScaled=true
+note.Font=Enum.Font.Gotham
 
 local rs=game:GetService("ReplicatedStorage")
 local pg=game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
