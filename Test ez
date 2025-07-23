@@ -106,7 +106,19 @@ toggle.Text=on and "Egg Event Farm: On" or "Egg Event Farm: Off"
 end)
 
 local rs=game:GetService("ReplicatedStorage")
+local pg=game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+
 for _,c in pairs(getconnections(rs.Events.OpenEventEgg.OnClientEvent)) do c:Disable() end
+
+task.spawn(function()
+while task.wait(0.2) do
+for _,v in pairs(pg:GetChildren()) do
+if v:IsA("ScreenGui") and v.Name:lower():match("egg") then
+v.Enabled=false
+end
+end
+end
+end)
 
 task.spawn(function()
 while task.wait() do
