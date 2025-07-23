@@ -52,6 +52,7 @@ inputConnection=game:GetService("UserInputService").InputChanged:Connect(functio
 if dragging and (m.UserInputType==Enum.UserInputType.MouseMovement or m.UserInputType==Enum.UserInputType.Touch) then
 local p=Vector2.new(m.Position.X,m.Position.Y)-offset
 main.Position=UDim2.new(0,p.X,0,p.Y)
+reopen.Position=UDim2.new(0,p.X,0,p.Y) + UDim2.new(0,90,0,80)
 end
 end)
 end
@@ -65,7 +66,7 @@ end
 end)
 
 local eggList={"Basic Egg","Rare Egg","Legendary Egg"}
-local index=3
+local index=1
 
 local selector=Instance.new("TextButton",main)
 selector.Size=UDim2.new(0.9,0,0,30)
@@ -115,6 +116,18 @@ note.TextWrapped=true
 note.TextScaled=true
 note.Font=Enum.Font.Gotham
 
+local reopen=Instance.new("TextButton",s)
+reopen.Size=UDim2.new(0,60,0,25)
+reopen.Position=main.Position + UDim2.new(0,90,0,80)
+reopen.Text="Open"
+reopen.BackgroundColor3=Color3.fromRGB(50,50,50)
+reopen.TextColor3=Color3.new(1,1,1)
+reopen.Font=Enum.Font.GothamSemibold
+reopen.TextSize=13
+reopen.Visible=false
+
+Instance.new("UICorner",reopen).CornerRadius=UDim.new(0,4)
+
 local close=Instance.new("TextButton",main)
 close.Size=UDim2.new(0,20,0,20)
 close.Position=UDim2.new(1,-25,0,5)
@@ -128,18 +141,6 @@ close.BorderSizePixel=0
 close.AutoButtonColor=true
 
 Instance.new("UICorner",close).CornerRadius=UDim.new(0,3)
-
-local reopen=Instance.new("TextButton",s)
-reopen.Size=UDim2.new(0,60,0,25)
-reopen.Position=UDim2.new(0,10,0,10)
-reopen.Text="Open"
-reopen.BackgroundColor3=Color3.fromRGB(50,50,50)
-reopen.TextColor3=Color3.new(1,1,1)
-reopen.Font=Enum.Font.GothamSemibold
-reopen.TextSize=13
-reopen.Visible=false
-
-Instance.new("UICorner",reopen).CornerRadius=UDim.new(0,4)
 
 close.MouseButton1Click:Connect(function()
 main.Visible=false
