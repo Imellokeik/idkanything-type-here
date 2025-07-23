@@ -4,7 +4,7 @@ s.ResetOnSpawn=false
 s.IgnoreGuiInset=true
 
 local main=Instance.new("Frame",s)
-main.Size=UDim2.new(0,240,0,150)
+main.Size=UDim2.new(0,240,0,160)
 main.Position=UDim2.new(0,30,0,150)
 main.BackgroundColor3=Color3.fromRGB(20,20,20)
 main.BorderSizePixel=0
@@ -85,24 +85,24 @@ index=index%#eggList+1
 selector.Text="Select Egg: "..eggList[index]
 end)
 
-local btn=Instance.new("TextButton",main)
-btn.Size=UDim2.new(0.9,0,0,30)
-btn.Position=UDim2.new(0.05,0,0,80)
-btn.BackgroundColor3=Color3.fromRGB(255,0,0)
-btn.Text="Egg Event Farm: Off"
-btn.Font=Enum.Font.GothamSemibold
-btn.TextColor3=Color3.new(1,1,1)
-btn.TextSize=13
-btn.BorderSizePixel=0
+local toggle=Instance.new("TextButton",main)
+toggle.Size=UDim2.new(0.9,0,0,30)
+toggle.Position=UDim2.new(0.05,0,0,80)
+toggle.BackgroundColor3=Color3.fromRGB(255,0,0)
+toggle.Text="Egg Event Farm: Off"
+toggle.Font=Enum.Font.GothamSemibold
+toggle.TextColor3=Color3.new(1,1,1)
+toggle.TextSize=13
+toggle.BorderSizePixel=0
 
-Instance.new("UICorner",btn).CornerRadius=UDim.new(0,5)
+Instance.new("UICorner",toggle).CornerRadius=UDim.new(0,5)
 
 local on=false
 
-btn.MouseButton1Click:Connect(function()
+toggle.MouseButton1Click:Connect(function()
 on=not on
-btn.BackgroundColor3=on and Color3.fromRGB(0,255,0) or Color3.fromRGB(255,0,0)
-btn.Text=on and "Egg Event Farm: On" or "Egg Event Farm: Off"
+toggle.BackgroundColor3=on and Color3.fromRGB(0,255,0) or Color3.fromRGB(255,0,0)
+toggle.Text=on and "Egg Event Farm: On" or "Egg Event Farm: Off"
 end)
 
 local rs=game:GetService("ReplicatedStorage")
