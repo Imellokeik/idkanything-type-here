@@ -4,7 +4,7 @@ s.ResetOnSpawn=false
 s.IgnoreGuiInset=true
 
 local main=Instance.new("Frame",s)
-main.Size=UDim2.new(0,240,0,140)
+main.Size=UDim2.new(0,240,0,150)
 main.Position=UDim2.new(0,30,0,150)
 main.BackgroundColor3=Color3.fromRGB(20,20,20)
 main.BorderSizePixel=0
