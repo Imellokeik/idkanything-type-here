@@ -26,6 +26,41 @@ task.wait(0.03)
 end
 end)
 
+local reopen=Instance.new("TextButton",s)
+reopen.Size=UDim2.new(0,60,0,25)
+reopen.Position=main.Position + UDim2.new(0,90,0,80)
+reopen.Text="Open"
+reopen.BackgroundColor3=Color3.fromRGB(50,50,50)
+reopen.TextColor3=Color3.new(1,1,1)
+reopen.Font=Enum.Font.GothamSemibold
+reopen.TextSize=13
+reopen.Visible=false
+
+Instance.new("UICorner",reopen).CornerRadius=UDim.new(0,4)
+
+local reopenDrag=false
+local reopenOffset
+
+reopen.InputBegan:Connect(function(i)
+if i.UserInputType==Enum.UserInputType.MouseButton1 then
+reopenDrag=true
+reopenOffset=Vector2.new(i.Position.X,i.Position.Y)-Vector2.new(reopen.Position.X.Offset,reopen.Position.Y.Offset)
+end
+end)
+
+game:GetService("UserInputService").InputEnded:Connect(function(i)
+if i.UserInputType==Enum.UserInputType.MouseButton1 then
+reopenDrag=false
+end
+end)
+
+game:GetService("UserInputService").InputChanged:Connect(function(i)
+if reopenDrag and i.UserInputType==Enum.UserInputType.MouseMovement then
+local pos=Vector2.new(i.Position.X,i.Position.Y)-reopenOffset
+reopen.Position=UDim2.new(0,pos.X,0,pos.Y)
+end
+end)
+
 local topbar=Instance.new("TextButton",main)
 topbar.Size=UDim2.new(1,0,0,30)
 topbar.BackgroundColor3=Color3.fromRGB(30,30,30)
@@ -52,7 +87,7 @@ inputConnection=game:GetService("UserInputService").InputChanged:Connect(functio
 if dragging and (m.UserInputType==Enum.UserInputType.MouseMovement or m.UserInputType==Enum.UserInputType.Touch) then
 local p=Vector2.new(m.Position.X,m.Position.Y)-offset
 main.Position=UDim2.new(0,p.X,0,p.Y)
-reopen.Position=UDim2.new(0,p.X,0,p.Y) + UDim2.new(0,90,0,80)
+reopen.Position=UDim2.new(0,p.X+90,0,p.Y+80)
 end
 end)
 end
@@ -115,18 +150,6 @@ note.TextColor3=Color3.fromRGB(255,255,255)
 note.TextWrapped=true
 note.TextScaled=true
 note.Font=Enum.Font.Gotham
-
-local reopen=Instance.new("TextButton",s)
-reopen.Size=UDim2.new(0,60,0,25)
-reopen.Position=main.Position + UDim2.new(0,90,0,80)
-reopen.Text="Open"
-reopen.BackgroundColor3=Color3.fromRGB(50,50,50)
-reopen.TextColor3=Color3.new(1,1,1)
-reopen.Font=Enum.Font.GothamSemibold
-reopen.TextSize=13
-reopen.Visible=false
-
-Instance.new("UICorner",reopen).CornerRadius=UDim.new(0,4)
 
 local close=Instance.new("TextButton",main)
 close.Size=UDim2.new(0,20,0,20)
