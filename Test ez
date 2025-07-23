@@ -129,8 +129,26 @@ close.AutoButtonColor=true
 
 Instance.new("UICorner",close).CornerRadius=UDim.new(0,3)
 
+local reopen=Instance.new("TextButton",s)
+reopen.Size=UDim2.new(0,60,0,25)
+reopen.Position=UDim2.new(0,10,0,10)
+reopen.Text="Open"
+reopen.BackgroundColor3=Color3.fromRGB(50,50,50)
+reopen.TextColor3=Color3.new(1,1,1)
+reopen.Font=Enum.Font.GothamSemibold
+reopen.TextSize=13
+reopen.Visible=false
+
+Instance.new("UICorner",reopen).CornerRadius=UDim.new(0,4)
+
 close.MouseButton1Click:Connect(function()
-s:Destroy()
+main.Visible=false
+reopen.Visible=true
+end)
+
+reopen.MouseButton1Click:Connect(function()
+main.Visible=true
+reopen.Visible=false
 end)
 
 local rs=game:GetService("ReplicatedStorage")
